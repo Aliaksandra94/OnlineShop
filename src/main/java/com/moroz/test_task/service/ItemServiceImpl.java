@@ -55,13 +55,13 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item addNewItem(String name, String description, Tag[] tags) {
-        Item item = new Item(name, description, tags);
+        Item item = new Item(name, description.toLowerCase(), tags);
         itemDAO.save(item);
         return item;
     }
 
     @Override
-    public void editItem(long itemId, String name, String description, Tag[] tags) {
+    public Item editItem(long itemId, String name, String description, Tag[] tags) {
         Item item = itemDAO.getById(itemId);
         if (!(name.equals(null) || name.equals(""))) {
             item.setName(name);
@@ -83,6 +83,7 @@ public class ItemServiceImpl implements ItemService {
             item.setTags(itemTags);
         }
         itemDAO.save(item);
+        return item;
     }
 
     @Override

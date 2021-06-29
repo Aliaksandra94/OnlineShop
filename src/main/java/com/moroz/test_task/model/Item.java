@@ -24,14 +24,13 @@ public class Item {
     @Enumerated
     @ElementCollection(targetClass = Tag.class)
     private Set<Tag> tags = EnumSet.noneOf(Tag.class);
-    //@JsonIgnore
     @ManyToMany
     @JoinTable(name = "basket_item_items",
             joinColumns = @JoinColumn(name = "item_id"),
             inverseJoinColumns = @JoinColumn(name = "basket_item_id"))
-    private List<BasketItem> basketItems;
+    private List<BasketItem> basketItems = new ArrayList<>();
     @OneToMany(mappedBy = "item")
-    private List<OrderItem> orderItems;
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     public Item(String name, String description, Tag[] tags) {
         this.name = name;
@@ -40,5 +39,21 @@ public class Item {
         for (Tag tag: tagSet){
             this.tags.add(tag);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return id == item.id &&
+                Objects.equals(name, item.name) &&
+                Objects.equals(description, item.description) &&
+                Objects.equals(tags, item.tags);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, tags);
     }
 }

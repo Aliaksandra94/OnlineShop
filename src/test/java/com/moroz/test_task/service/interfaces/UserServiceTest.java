@@ -15,7 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class UserServiceTest {
+public class UserServiceTest {
     @Autowired
     UserService userService;
     @MockBean
@@ -31,10 +31,10 @@ class UserServiceTest {
         User userActual = new User("SASHA", passwordEncoder.encode("SASHA"), "SASHA");
         User userExpected = userService.addNewUser("SASHA", "SASHA", "SASHA");
         Assert.assertNotNull(userExpected);
-        Assert.assertEquals(userExpected.getLogin(), userActual.getLogin());
-        Assert.assertEquals(userExpected.getEmail(), userActual.getEmail());
-        Assert.assertEquals(userExpected.getPassword(), userActual.getPassword());
-        Assert.assertEquals(userExpected, userActual);
+        Assert.assertEquals(userActual.getLogin(), userExpected.getLogin());
+        Assert.assertEquals(userActual.getEmail(), userExpected.getEmail());
+        Assert.assertEquals(userActual.getPassword(), userExpected.getPassword());
+        Assert.assertEquals(userActual, userExpected);
         Assert.assertNotNull(userExpected.getBasket());
         Assert.assertNotNull(userExpected.getOrders());
         Mockito.verify(roleDao, Mockito.times(1)).getById((long) 2);
@@ -52,6 +52,6 @@ class UserServiceTest {
         User userActual = new User("SASHA", passwordEncoder.encode("SASHA"), "SASHA");
         Mockito.doReturn(new User("SASHA", passwordEncoder.encode("SASHA"), "SASHA")).when(userDao).findByLogin("SASHA");
         User userExpected = userService.returnUserByLogin("SASHA");
-        Assert.assertEquals(userExpected, userActual);
+        Assert.assertEquals(userActual, userExpected);
     }
 }
