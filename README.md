@@ -58,14 +58,21 @@ Login/pass: ADMIN/ADMIN (using CapsLock).
 
 ***
 
+Application security (access to resources, some operations) is configured via Spring Security. The rights with access to the resource are listed under the method. Ыecurity schemes used by the API are not defined (if you try to access a resource for which there are no rights you'll get the following error:
 
+error "status": 500,
+
+"error": "Internal Server Error",
+
+"trace": "java.lang.NullPointerException )
+***
 
 
 Technology Stack:
 
 Java 8+
 
-Spring (Spring Boot, Spring MVC, Spring Data, Spring Security)
+Spring (Spring Boot, Spring MVC, Spring Data, Spring Security(application security (as access to resources, some operations))
 
 H2(inMemoryDB)
 
@@ -83,7 +90,7 @@ PASSWORD = Ch0C0C0m123.
 
 If it's not and account didn't send messages, please, following the bellow instructions: 
 
-1. Log in to Gmail account (with login and password above. 
+1. Log in to Gmail account (with login and password above). 
  
 2. Then follow the link: https://www.google.com/settings/security/lesssecureapps
 
