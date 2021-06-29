@@ -42,8 +42,8 @@ class ItemServiceTest {
     @Test
     void returnItemById() {
         long id = 1;
-        Item item = new Item("Milk", "DAIRY", Tag.values());
-        Mockito.doReturn(new Item("Milk", "DAIRY", Tag.values())).when(itemDAO).getById(id);
+        Item item = new Item("Milk", "dairy", Tag.values());
+        Mockito.doReturn(new Item("Milk", "daity", Tag.values())).when(itemDAO).getById(id);
         Assert.assertEquals(item, itemService.returnItemById(id));
     }
 
