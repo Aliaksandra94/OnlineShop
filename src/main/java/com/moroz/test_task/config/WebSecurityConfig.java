@@ -26,27 +26,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(8);
     }
 
-//    @Override
-//    public void configure(WebSecurity web) throws Exception {
-//        web.ignoring().antMatchers("/v2/api-docs",
-//                "/configuration/ui",
-//                "/swagger-resources/**",
-//                "/configuration/security",
-//                "/swagger-ui.html",
-//                "/webjars/**");
-//    }
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.headers().frameOptions().disable();
-//        http.authorizeRequests().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**")
-//                .permitAll();
         http.authorizeRequests().antMatchers("/login", "/logout").permitAll();
-        http.authorizeRequests().antMatchers("/main", "/catalog").authenticated();
-        http.authorizeRequests().antMatchers("/main/order/{id}", "/basket").hasAuthority("USER");
-        http.authorizeRequests().antMatchers("/catalog/*", "/catalog/**").hasAuthority("ADMIN");
+        http.authorizeRequests().antMatchers("/main", "/main/catalog").authenticated();
+        http.authorizeRequests().antMatchers("/main/order/{id}", "/main/basket").hasAuthority("USER");
+        http.authorizeRequests().antMatchers("/main/catalog/*", "/main/catalog/**").hasAuthority("ADMIN");
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
         http.authorizeRequests().and().formLogin()
                 .loginProcessingUrl("/login").permitAll()

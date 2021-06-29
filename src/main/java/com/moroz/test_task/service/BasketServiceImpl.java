@@ -15,16 +15,11 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class BasketServiceImpl implements BasketService {
-    private BasketDao basketDao;
     private BasketItemDAO basketItemDAO;
     private ItemDAO itemDAO;
     private OrderDAO orderDAO;
     private OrderItemDAO orderItemDAO;
 
-    @Autowired
-    public void setBasketDao(BasketDao basketDao) {
-        this.basketDao = basketDao;
-    }
 
     @Autowired
     public void setBasketItemDAO(BasketItemDAO basketItemDAO) {
@@ -56,11 +51,13 @@ public class BasketServiceImpl implements BasketService {
         if (user.getBasket() == null) {
             user.setBasket(new Basket(user, new ArrayList<>()));
         }
-        BasketItem basketItem = new BasketItem(user.getBasket());
         Item item = itemDAO.getById(itemId);
+        BasketItem basketItem = new BasketItem(user.getBasket());
         item.getBasketItems().add(basketItem);
         basketItemDAO.save(basketItem);
+        itemDAO.save(item);
     }
+
 
     @Override
     public List<BasketItem> deleteItem(User user, long id) {
@@ -77,6 +74,7 @@ public class BasketServiceImpl implements BasketService {
             deleteItem(user, user.getBasket().getBasketItems().get(0).getItems().get(0).getId());
         }
     }
+
     @Override
     public long placedOrder(Basket basket) {
         Order order = new Order();
@@ -88,6 +86,7 @@ public class BasketServiceImpl implements BasketService {
             orderItem.setOrder(order);
             for (Item item : basketItem.getItems()) {
                 orderItem.setItem(item);
+                orderItemDAO.save(orderItem);
                 orderItems.add(orderItem);
             }
         }

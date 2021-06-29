@@ -2,7 +2,6 @@ package com.moroz.test_task.service.interfaces;
 
 import com.moroz.test_task.model.Basket;
 import com.moroz.test_task.model.BasketItem;
-import com.moroz.test_task.model.Item;
 import com.moroz.test_task.model.User;
 
 import java.util.List;

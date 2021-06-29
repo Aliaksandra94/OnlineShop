@@ -7,10 +7,11 @@ import com.moroz.test_task.model.User;
 import com.moroz.test_task.service.interfaces.BasketService;
 import com.moroz.test_task.service.interfaces.OrderService;
 import com.moroz.test_task.service.interfaces.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,16 +52,17 @@ public class BasketController {
         this.mailSender = mailSender;
     }
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     @PreAuthorize(value = "hasAuthority('USER')")
-    @ApiOperation("Get basket's page")
+    @ApiOperation(value = "Get basket's page",
+            authorizations = {@Authorization(value = "USER")})
     @Authorization(value = "USER")
     public List<BasketItem> getBasketPage(HttpServletRequest request) {
-        User user = userService.returnUserByLogin(request.getUserPrincipal().getName());
-        return basketService.returnBasketItems(user);
+        return basketService.returnBasketItems(userService.returnUserByLogin(request.getUserPrincipal().getName()));
     }
 
-    @DeleteMapping("/{itemId}/delete")
+
+    @DeleteMapping(value = "/{itemId}/delete", produces = "application/json")
     @PreAuthorize(value = "hasAuthority('USER')")
     @ApiOperation("Delete item from the basket")
     @Authorization(value = "USER")
@@ -70,11 +72,11 @@ public class BasketController {
     }
 
 
-    @PostMapping("/placedOrder")
+    @PostMapping(value = "/placedOrder", produces = "application/json")
     @PreAuthorize(value = "hasAuthority('USER')")
     @ApiOperation("Placed order")
     @Authorization(value = "USER")
-    public void placedOrder(HttpServletRequest request) throws MessagingException {
+    public Order placedOrder(HttpServletRequest request) throws MessagingException {
         User user = userService.returnUserByLogin(request.getUserPrincipal().getName());
         long orderId = basketService.placedOrder(user.getBasket());
         Order order = orderService.returnOrderById(orderId);
@@ -99,5 +101,6 @@ public class BasketController {
         helper.setTo(user.getEmail());
         helper.setSubject("Order confirmation.");
         this.mailSender.send(message);
+        return order;
     }
 }

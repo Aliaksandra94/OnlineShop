@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface OrderItemDAO extends JpaRepository<OrderItem, Long> {
     @Query(value = "from OrderItem oi where oi.item.id =:itemId")
-    List<OrderItem> findByItemId(long itemId);
+    OrderItem findByItemId(long itemId);
 }

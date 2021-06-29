@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +28,12 @@ public class LoginController {
     @Operation(
             summary = "User authorization",
             description = "Allows the user to log in")
-    public String getAuthenticationAndAuthorization() {
-        return "login/login";
+    public HttpStatus getAuthenticationAndAuthorization() {
+        return HttpStatus.OK;
     }
 
 //For present in SWAGGER
-    @PostMapping
+    @PostMapping(produces = "application/json")
     @Operation(
             summary = "User Login",
             description = "Check user login and password")
@@ -48,8 +49,15 @@ public class LoginController {
     }
 
     @GetMapping("/failedEnter")
-    public String failedEnter(Model model) {
-        model.addAttribute("msg", messageSource.getMessage("error.authorization", new String[]{"error.authorization"}, LocaleContextHolder.getLocale()));
-        return "login/login";
+    public HttpStatus failedEnter(Model model) {
+        return HttpStatus.PERMANENT_REDIRECT;
     }
+    @PostMapping("/logout")
+    @Operation(
+            summary = "Logout",
+            description = "Logout")
+    public HttpStatus getLogout() {
+        return HttpStatus.OK;
+    }
+
 }

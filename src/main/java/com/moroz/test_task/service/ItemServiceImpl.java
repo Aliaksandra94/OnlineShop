@@ -1,38 +1,37 @@
 package com.moroz.test_task.service;
 
-import com.moroz.test_task.model.Item;
-import com.moroz.test_task.model.Order;
-import com.moroz.test_task.model.OrderItem;
-import com.moroz.test_task.model.Tag;
+import com.moroz.test_task.model.*;
+import com.moroz.test_task.repository.BasketItemDAO;
 import com.moroz.test_task.repository.ItemDAO;
-import com.moroz.test_task.repository.OrderDAO;
 import com.moroz.test_task.repository.OrderItemDAO;
 import com.moroz.test_task.service.interfaces.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
 public class ItemServiceImpl implements ItemService {
     private ItemDAO itemDAO;
+    private BasketItemDAO basketItemDAO;
     private OrderItemDAO orderItemDAO;
 
     @Autowired
     public void setItemDAO(ItemDAO itemDAO) {
         this.itemDAO = itemDAO;
     }
+
+    @Autowired
+    public void setBasketItemDAO(BasketItemDAO basketItemDAO) {
+        this.basketItemDAO = basketItemDAO;
+    }
+
     @Autowired
     public void setOrderItemDAO(OrderItemDAO orderItemDAO) {
         this.orderItemDAO = orderItemDAO;
     }
-
-
 
     @Override
     public List<Item> returnAllItems() {
@@ -55,9 +54,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void addNewItem(String name, String description, Tag[] tags) {
+    public Item addNewItem(String name, String description, Tag[] tags) {
         Item item = new Item(name, description, tags);
         itemDAO.save(item);
+        return item;
     }
 
     @Override
@@ -92,15 +92,20 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public boolean isItemAlreadyInBasketOrInOrder(long itemId) {
-        Item item = itemDAO.getById(itemId);
-        if (item.getBasketItems().contains(item)) {
+    public boolean isItemAlreadyInBasket(long itemId, User user) {
+        if (user.getBasket().getBasketItems().stream().anyMatch(basketItem -> basketItem.getItems().get(0).getId() == itemId)) {
             return true;
         }
-        List<OrderItem> orderItems = orderItemDAO.findByItemId(itemId);
-        if (orderItems.size() != 0 || !orderItems.equals(null)){
-            return true;
+        return false;
+    }
+
+    @Override
+    public boolean isItemAlreadyInOrder(long itemId, User user) {
+        for (Order order : user.getOrders()) {
+            if (order.getOrderItems().contains(orderItemDAO.findByItemId(itemId))){
+                return true;
+            }
         }
-            return false;
+        return false;
     }
 }

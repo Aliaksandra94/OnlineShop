@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -42,18 +43,24 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void addNewUser(String login, String password, String email) {
+    public User addNewUser(String login, String password, String email) {
         User user = new User(login, passwordEncoder.encode(password), email);
         Set<Role> roles = new HashSet<>();
         roles.add(roleDao.getById((long) 2));
         user.setUsersRole(roles);
         user.setBasket(new Basket(user, new ArrayList<>()));
         userDao.save(user);
+        return user;
     }
 
     @Override
     public User returnUserByLogin(String login) {
         return userDao.findByLogin(login);
+    }
+
+    @Override
+    public List<User> returnUserByRoleId(long roleId) {
+        return userDao.findByUsersRole(roleDao.getById(roleId));
     }
 
     @Override
