@@ -70,7 +70,6 @@ Spring (Spring Boot, Spring MVC, Spring Data, Spring Security)
 H2(inMemoryDB)
 
 Swagger (links:   http://localhost:8080/swagger-ui/   
-
                   http://localhost:8080/v2/api-docs)
                   
 Gmail account for sending messages 
@@ -88,5 +87,5 @@ If it's not and account didn't send messages, please, following the bellow instr
  
 2. Then follow the link: https://www.google.com/settings/security/lesssecureapps
 
-3. Chenge field "Allow less secute apps" to ON.
+3. Change field "Allow less secute apps" to ON.
  
