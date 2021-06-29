@@ -10,5 +10,5 @@ public interface UserService extends UserDetailsService {
     User addNewUser(String login, String password, String email);
     User returnUserByLogin(String login);
     User checkUserForLogIn(String login, String password);
-    List<User> returnUserByRoleId(long roleId);
+    List<User> returnUsersByRoleId(long roleId);
 }

@@ -136,7 +136,7 @@ public class CatalogController {
     public Item editItem(HttpServletRequest request, @RequestParam("itemId") long itemId, @RequestParam(required = false, value = "name", defaultValue = "") String name,
                            @RequestParam(required = false, value = "description", defaultValue = "") String description,
                            @RequestParam(required = false, value = "tags", defaultValue = "") Tag[] tags) {
-        List<User> users = userService.returnUserByRoleId(2);
+        List<User> users = userService.returnUsersByRoleId(2);
         String message = "";
         for (User user : users) {
             if (itemService.isItemAlreadyInBasket(itemId, user) || itemService.isItemAlreadyInOrder(itemId, user)) {
@@ -159,7 +159,7 @@ public class CatalogController {
     public Item forceEditItem(@RequestParam("itemId") long itemId, @RequestParam(required = false, value = "name", defaultValue = "") String name,
                               @RequestParam(required = false, value = "description", defaultValue = "") String description,
                               @RequestParam(required = false, value = "tags", defaultValue = "") Tag[] tags) throws MessagingException {
-        List<User> users = userService.returnUserByRoleId(2);
+        List<User> users = userService.returnUsersByRoleId(2);
         for (User user : users) {
             if (itemService.isItemAlreadyInBasket(itemId, user)) {
                 MimeMessage message = mailSender.createMimeMessage();
@@ -189,7 +189,7 @@ public class CatalogController {
     @ApiOperation("Delete item")
     @Authorization(value = "ADMIN")
     public String deleteItem(HttpServletRequest request, @RequestParam("itemId") long itemId) {
-        List<User> users = userService.returnUserByRoleId(2);
+        List<User> users = userService.returnUsersByRoleId(2);
         String message = "";
         for (User user : users) {
             if (itemService.isItemAlreadyInBasket(itemId, user) || itemService.isItemAlreadyInOrder(itemId, user)) {

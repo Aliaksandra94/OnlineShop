@@ -6,6 +6,7 @@ import com.moroz.test_task.model.User;
 import com.moroz.test_task.repository.RoleDao;
 import com.moroz.test_task.repository.UserDao;
 import com.moroz.test_task.service.interfaces.UserService;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,7 +42,6 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-
     @Override
     public User addNewUser(String login, String password, String email) {
         User user = new User(login, passwordEncoder.encode(password), email);
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> returnUserByRoleId(long roleId) {
+    public List<User> returnUsersByRoleId(long roleId) {
         return userDao.findByUsersRole(roleDao.getById(roleId));
     }
 

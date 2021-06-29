@@ -38,12 +38,10 @@ public class User implements UserDetails {
     private String password;
     @Email
     private String email;
-    //@JsonIgnore
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Basket basket;
-    //@JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Order> orders;
+    private List<Order> orders = new ArrayList<>();
 
     public User(String login, String password, String email) {
         this.login = login;
@@ -96,5 +94,19 @@ public class User implements UserDetails {
                 user.getAuthorities());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id &&
+                Objects.equals(login, user.login) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(email, user.email);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, login, password, email);
+    }
 }
