@@ -3,8 +3,11 @@ Test task - Online Shop. A WEB application that represents the system of small p
 
 
 USER Role: Available actions: 
+
 http://localhost:8080/registration            Registration
+
 http://localhost:8080/login                   Authorization
+
 http://localhost:8080/main                    View the list of orders and link for the catalog and basket
 http://localhost:8080/main/orders/order/{id}  View the order
 http://localhost:8080/main/catalog            View the catalog, filter items by description or tags, add item to the basket
